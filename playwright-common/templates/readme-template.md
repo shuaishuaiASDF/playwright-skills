@@ -1,7 +1,7 @@
 # UI 自动化测试与审计工具集 ([test-root])
 
 > 本模板仅用于“已有 Playwright 测试框架中的 README 维护与补充”。
-> 若项目尚未完成首次 Playwright/ui-test 基础框架初始化，请优先使用 `$ctj-playwright-bootstrap`。
+> 若项目尚未完成首次 Playwright/ui-test 基础框架初始化，请优先使用 `$playwright-bootstrap`。
 
 本项目基于 **Playwright** 框架，集成了针对 [项目名称] 系统的冒烟测试、功能审计及全链路数据一致性校验工具。
 

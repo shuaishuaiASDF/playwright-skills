@@ -6,7 +6,7 @@
 
 | Skill | 用途 | 触发场景 |
 |-------|------|---------|
-| [`ctj-playwright-bootstrap`](playwright-bootstrap/) | 新项目首次初始化 Playwright ui-test 基础框架 | 新仓库搭框架、补齐缺失骨架 |
+| [`playwright-bootstrap`](playwright-bootstrap/) | 新项目首次初始化 Playwright ui-test 基础框架 | 新仓库搭框架、补齐缺失骨架 |
 | [`playwright-common`](./playwright-common/) | 日常 Playwright 脚本开发与维护的通用知识库 | 写 spec、补能力、调试、重构、补矩阵 |
 | [`playwright-matrix-plan`](./playwright-matrix-plan/) | 测试矩阵分析与场景规划 | 新模块评估、测试策略制定、用例规划 |
 
@@ -46,7 +46,7 @@
 # macOS / Linux
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills && \
 mkdir -p ~/.claude/skills && \
-cp -r /tmp/playwright-skills/ctj-playwright-bootstrap ~/.claude/skills/ && \
+cp -r /tmp/playwright-skills/playwright-bootstrap ~/.claude/skills/ && \
 cp -r /tmp/playwright-skills/playwright-common ~/.claude/skills/ && \
 cp -r /tmp/playwright-skills/playwright-matrix-plan ~/.claude/skills/ && \
 rm -rf /tmp/playwright-skills && \
@@ -56,7 +56,7 @@ echo "✅ 安装完成"
 ```powershell
 # Windows (PowerShell)
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git $env:TEMP\playwright-skills
-Copy-Item -Recurse $env:TEMP\playwright-skills\ctj-playwright-bootstrap $env:USERPROFILE\.claude\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-bootstrap $env:USERPROFILE\.claude\skills\
 Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-common $env:USERPROFILE\.claude\skills\
 Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-matrix-plan $env:USERPROFILE\.claude\skills\
 Remove-Item -Recurse $env:TEMP\playwright-skills
@@ -70,7 +70,7 @@ Write-Host "✅ 安装完成"
 
 ```bash
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git
-cp -r playwright-skills/ctj-playwright-bootstrap ~/.claude/skills/
+cp -r playwright-skills/playwright-bootstrap ~/.claude/skills/
 cp -r playwright-skills/playwright-common ~/.claude/skills/
 cp -r playwright-skills/playwright-matrix-plan ~/.claude/skills/
 ```
@@ -86,7 +86,7 @@ cp -r playwright-skills/playwright-matrix-plan ~/.claude/skills/
 # 在项目根目录执行
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills
 mkdir -p .claude/skills
-cp -r /tmp/playwright-skills/ctj-playwright-bootstrap .claude/skills/
+cp -r /tmp/playwright-skills/playwright-bootstrap .claude/skills/
 cp -r /tmp/playwright-skills/playwright-common .claude/skills/
 cp -r /tmp/playwright-skills/playwright-matrix-plan .claude/skills/
 rm -rf /tmp/playwright-skills
@@ -100,7 +100,7 @@ rm -rf /tmp/playwright-skills
 # macOS / Linux
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills && \
 mkdir -p ~/.codex/skills && \
-cp -r /tmp/playwright-skills/ctj-playwright-bootstrap ~/.codex/skills/ && \
+cp -r /tmp/playwright-skills/playwright-bootstrap ~/.codex/skills/ && \
 cp -r /tmp/playwright-skills/playwright-common ~/.codex/skills/ && \
 cp -r /tmp/playwright-skills/playwright-matrix-plan ~/.codex/skills/ && \
 rm -rf /tmp/playwright-skills && \
@@ -110,7 +110,7 @@ echo "✅ 安装完成"
 ```powershell
 # Windows (PowerShell)
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git $env:TEMP\playwright-skills
-Copy-Item -Recurse $env:TEMP\playwright-skills\ctj-playwright-bootstrap $env:USERPROFILE\.codex\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-bootstrap $env:USERPROFILE\.codex\skills\
 Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-common $env:USERPROFILE\.codex\skills\
 Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-matrix-plan $env:USERPROFILE\.codex\skills\
 Remove-Item -Recurse $env:TEMP\playwright-skills
@@ -132,7 +132,7 @@ ls ~/.codex/skills/
 预期输出：
 
 ```
-ctj-playwright-bootstrap  — 初始化 Playwright ui-test 框架
+playwright-bootstrap  — 初始化 Playwright ui-test 框架
 playwright-common         — 日常 Playwright 脚本开发
 playwright-matrix-plan    — 测试矩阵分析与规划
 ```
@@ -142,13 +142,13 @@ playwright-matrix-plan    — 测试矩阵分析与规划
 ```
 # Claude Code
 ~/.claude/skills/
-├── ctj-playwright-bootstrap/SKILL.md
+├── playwright-bootstrap/SKILL.md
 ├── playwright-common/SKILL.md
 └── playwright-matrix-plan/SKILL.md
 
 # Codex
 ~/.codex/skills/
-├── ctj-playwright-bootstrap/SKILL.md
+├── playwright-bootstrap/SKILL.md
 ├── playwright-common/SKILL.md
 └── playwright-matrix-plan/SKILL.md
 ```
@@ -160,7 +160,7 @@ playwright-matrix-plan    — 测试矩阵分析与规划
 在 Claude Code 中输入：
 
 ```
-$ctj-playwright-bootstrap
+$playwright-bootstrap
 ```
 
 或直接用自然语言：
@@ -193,7 +193,7 @@ $playwright-matrix-plan
 ## 目录结构
 
 ```
-├── ctj-playwright-bootstrap/     # 框架初始化 Skill
+├── playwright-bootstrap/     # 框架初始化 Skill
 │   ├── SKILL.md                  #   Skill 指令文件
 │   ├── agents/openai.yaml        #   Codex Agent 配置
 │   └── assets/templates/ui-test/ #   可复制的框架模板
