@@ -1,0 +1,7 @@
+interface:
+  display_name: "CTJ Playwright 初始化"
+  short_description: "首次初始化 ui-test 自动化测试基础框架"
+  default_prompt: "Use $ctj-playwright-bootstrap to initialize a brand-new Playwright ui-test framework for the current project."
+
+policy:
+  allow_implicit_invocation: false

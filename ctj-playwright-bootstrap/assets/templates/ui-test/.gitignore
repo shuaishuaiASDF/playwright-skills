@@ -1,0 +1,7 @@
+node_modules/
+code/.auth/*.json
+reports/
+playwright-report/
+test-results/
+.env
+.env.db.local

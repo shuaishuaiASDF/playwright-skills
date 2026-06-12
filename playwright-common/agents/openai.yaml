@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playwright Common"
+  short_description: "Plan, implement, and audit Playwright tests"
+  default_prompt: "Use $playwright-common to analyze a page, design a scenario matrix, implement Playwright coverage, and produce an audit-ready report."
