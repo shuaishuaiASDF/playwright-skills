@@ -6,7 +6,7 @@
 
 | Skill | 用途 | 触发场景 |
 |-------|------|---------|
-| [`ctj-playwright-bootstrap`](./ctj-playwright-bootstrap/) | 新项目首次初始化 Playwright ui-test 基础框架 | 新仓库搭框架、补齐缺失骨架 |
+| [`ctj-playwright-bootstrap`](playwright-bootstrap/) | 新项目首次初始化 Playwright ui-test 基础框架 | 新仓库搭框架、补齐缺失骨架 |
 | [`playwright-common`](./playwright-common/) | 日常 Playwright 脚本开发与维护的通用知识库 | 写 spec、补能力、调试、重构、补矩阵 |
 | [`playwright-matrix-plan`](./playwright-matrix-plan/) | 测试矩阵分析与场景规划 | 新模块评估、测试策略制定、用例规划 |
 

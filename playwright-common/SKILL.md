@@ -10,7 +10,7 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 先读代码，再分析；除非用户明确说“直接落地”，否则不要一开始就写脚本。
 - 结论必须基于真实代码、真实接口、真实运行结果，禁止猜测页面能力、接口行为、校验规则。
 - 优先复用项目内已有 Playwright 公共能力、测试夹具、登录态方案、报告模板、选择器约定；新增能力只做最小必要沉淀。
-- 如果需求是“首次初始化 Playwright 基础框架 / 搭建 ui-test 初始目录 / 补齐基础骨架”，不要在本 Skill 内处理，转用 `$ctj-playwright-bootstrap`。
+- 如果需求是“首次初始化 Playwright 基础框架 / 搭建 ui-test 初始目录 / 补齐基础骨架”，不要在本 Skill 内处理，转用 `$playwright-bootstrap`。
 - 报告必须优先对齐当前 Skill 定义的标准审计结构；若仓库内已有成熟自动化脚本或报告实现，则实现方式应与该标准保持一致。
 - 复杂字段回归优先采用字段审计模型，为每个字段定义来源、校验方式与比对规则，不要在 spec 里零散堆积断言。
 - `PASS / WARN / FAIL / SKIP` 要严格区分：业务断言不成立时应记录审计 `FAIL`，依赖缺失时记录 `SKIP`，不要把可审计的业务结果包装成脚本崩溃。
@@ -26,7 +26,7 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 
 - 本 Skill 是 Playwright 自动化的标准层与母版规范。
 - 本 Skill 不负责新项目的 Playwright 基础框架初始化。
-- 若任务目标是首次创建或首次补齐 `ui-test/` 基础骨架，应优先调用 `$ctj-playwright-bootstrap`。
+- 若任务目标是首次创建或首次补齐 `ui-test/` 基础骨架，应优先调用 `$playwright-bootstrap`。
 - 若仓库内同时存在“项目专用 Playwright Skill”，则项目专用 Skill 应继承本 Skill 的标准，再补充项目差异，不应重复复制整份通用规则。
 - 当任务明确命中某个项目专用 Skill 的触发条件时，应优先触发项目专用 Skill；本 Skill 继续作为其底层标准。
 - 当任务不属于任何项目专用 Skill，或当前仓库没有项目专用 Skill 时，直接使用本 Skill。
@@ -149,14 +149,14 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 1. 以 `templates/audit-report-template.md` 作为标准报告结构。
 2. 若项目已有公共 reporter、markdown 生成器或统一报告基建，应优先复用该工具，但最终产物必须对齐本 Skill 的标准结构。
 3. 若项目存在成熟专项脚本，且这些脚本已经沉淀出稳定报告风格，应优先检查其是否已符合本 Skill 标准；符合则直接复用，不符合则按标准收敛。
-4. 若项目内没有现成 reporter 或统一工具，先判断当前任务是否其实属于“首次补齐基础框架”；若是，转用 `$ctj-playwright-bootstrap` 补齐基础 reporter 模板，再在本 Skill 中做接入与场景落地。
+4. 若项目内没有现成 reporter 或统一工具，先判断当前任务是否其实属于“首次补齐基础框架”；若是，转用 `$playwright-bootstrap` 补齐基础 reporter 模板，再在本 Skill 中做接入与场景落地。
 
 ### 报告生成器使用规则
 
 - 本 Skill 优先处理“如何接入已有 reporter”，而不是“如何初始化 reporter 母版”。
 - 若项目中没有统一生成报告的代码，先确认：
   - 这是否属于首次初始化 / 首次补齐基础框架；
-  - 若是，则调用 `$ctj-playwright-bootstrap`；
+  - 若是，则调用 `$playwright-bootstrap`；
   - 若不是，则在分析结论里明确指出“当前项目缺少 reporter 基建，需要先补基础框架或提供统一报告方案”。
 
 ### 使用要求
@@ -173,7 +173,7 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
   - DB、文件、事件等外部原证附录形式
   - `PASS / WARN / FAIL / SKIP` 是否都能进入摘要统计
 - 若项目已有 reporter 但当前页面尚未接入，可参考 `examples/audit-reporter-integration.md` 设计最小接入方案。
-- 若当前任务意图其实是“先搭 Playwright 基础框架”，不要继续在本 Skill 中发散，应转用 `$ctj-playwright-bootstrap`。
+- 若当前任务意图其实是“先搭 Playwright 基础框架”，不要继续在本 Skill 中发散，应转用 `$playwright-bootstrap`。
 
 ## 必做阅读范围
 
@@ -474,4 +474,4 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 如果用户说“直接落地”，可以直接实现并跑验证。
 - 如果参考了仓库内已有同类脚本的报告格式或实现方式，必须明确说明参考了哪个脚本，以及本次是否保持一致。
 - 若仓库内已有同类页面的成熟报告模板或聚合报告实现，优先完全对齐其结构，不要自行发明新的报告格式。
-- 如果项目没有现成的 reporter、目录规范、命名规范、登录态基建，应先判断是否属于初始化需求；属于初始化需求时，转用 `$ctj-playwright-bootstrap`，不要在本 Skill 内自行搭目录骨架。
+- 如果项目没有现成的 reporter、目录规范、命名规范、登录态基建，应先判断是否属于初始化需求；属于初始化需求时，转用 `$playwright-bootstrap`，不要在本 Skill 内自行搭目录骨架。
