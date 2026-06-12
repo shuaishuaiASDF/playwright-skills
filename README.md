@@ -34,78 +34,102 @@
 
 ### 前置条件
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [OpenAI Codex](https://openai.com/index/introducing-codex/) 已安装并可用
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [OpenAI Codex CLI](https://github.com/openai/codex) 已安装并可用
 - Git
 
-### 第一步：克隆仓库
+### Claude Code
+
+<details>
+<summary><b>一键安装（推荐）</b></summary>
+
+```bash
+# macOS / Linux
+git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills && \
+mkdir -p ~/.claude/skills && \
+cp -r /tmp/playwright-skills/ctj-playwright-bootstrap ~/.claude/skills/ && \
+cp -r /tmp/playwright-skills/playwright-common ~/.claude/skills/ && \
+cp -r /tmp/playwright-skills/playwright-matrix-plan ~/.claude/skills/ && \
+rm -rf /tmp/playwright-skills && \
+echo "✅ 安装完成"
+```
+
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/shuaishuaiASDF/playwright-skills.git $env:TEMP\playwright-skills
+Copy-Item -Recurse $env:TEMP\playwright-skills\ctj-playwright-bootstrap $env:USERPROFILE\.claude\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-common $env:USERPROFILE\.claude\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-matrix-plan $env:USERPROFILE\.claude\skills\
+Remove-Item -Recurse $env:TEMP\playwright-skills
+Write-Host "✅ 安装完成"
+```
+
+</details>
+
+<details>
+<summary><b>手动安装</b></summary>
 
 ```bash
 git clone https://github.com/shuaishuaiASDF/playwright-skills.git
-cd playwright-skills
-```
-
-### 第二步：复制 Skill 到对应目录
-
-<details>
-<summary><b>Claude Code 安装</b></summary>
-
-**全局安装**（所有项目可用）：
-
-| 系统 | 目标路径 |
-|------|---------|
-| macOS / Linux | `~/.claude/skills/` |
-| Windows | `%USERPROFILE%\.claude\skills\` |
-
-```bash
-# macOS / Linux
-cp -r ctj-playwright-bootstrap ~/.claude/skills/
-cp -r playwright-common ~/.claude/skills/
-cp -r playwright-matrix-plan ~/.claude/skills/
-
-# Windows (PowerShell)
-Copy-Item -Recurse ctj-playwright-bootstrap $env:USERPROFILE\.claude\skills\
-Copy-Item -Recurse playwright-common $env:USERPROFILE\.claude\skills\
-Copy-Item -Recurse playwright-matrix-plan $env:USERPROFILE\.claude\skills\
-```
-
-**项目级安装**（仅当前项目可用）：
-
-```bash
-# macOS / Linux
-cp -r ctj-playwright-bootstrap /path/to/your-project/.claude/skills/
-cp -r playwright-common /path/to/your-project/.claude/skills/
-cp -r playwright-matrix-plan /path/to/your-project/.claude/skills/
-
-# Windows (PowerShell)
-Copy-Item -Recurse ctj-playwright-bootstrap D:\your-project\.claude\skills\
-Copy-Item -Recurse playwright-common D:\your-project\.claude\skills\
-Copy-Item -Recurse playwright-matrix-plan D:\your-project\.claude\skills\
+cp -r playwright-skills/ctj-playwright-bootstrap ~/.claude/skills/
+cp -r playwright-skills/playwright-common ~/.claude/skills/
+cp -r playwright-skills/playwright-matrix-plan ~/.claude/skills/
 ```
 
 </details>
 
 <details>
-<summary><b>Codex 安装</b></summary>
+<summary><b>项目级安装</b></summary>
 
-将 Skill 复制到 Codex 的 skills 目录：
+仅当前项目可用，适合团队统一版本：
 
 ```bash
-# macOS / Linux
-cp -r ctj-playwright-bootstrap ~/.codex/skills/
-cp -r playwright-common ~/.codex/skills/
-cp -r playwright-matrix-plan ~/.codex/skills/
-
-# Windows (PowerShell)
-Copy-Item -Recurse ctj-playwright-bootstrap $env:USERPROFILE\.codex\skills\
-Copy-Item -Recurse playwright-common $env:USERPROFILE\.codex\skills\
-Copy-Item -Recurse playwright-matrix-plan $env:USERPROFILE\.codex\skills\
+# 在项目根目录执行
+git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills
+mkdir -p .claude/skills
+cp -r /tmp/playwright-skills/ctj-playwright-bootstrap .claude/skills/
+cp -r /tmp/playwright-skills/playwright-common .claude/skills/
+cp -r /tmp/playwright-skills/playwright-matrix-plan .claude/skills/
+rm -rf /tmp/playwright-skills
 ```
 
 </details>
 
-### 第三步：验证安装
+### Codex CLI
 
-重启 Claude Code / Codex，输入 `/help`，确认三个 Skill 出现在可用列表中：
+```bash
+# macOS / Linux
+git clone https://github.com/shuaishuaiASDF/playwright-skills.git /tmp/playwright-skills && \
+mkdir -p ~/.codex/skills && \
+cp -r /tmp/playwright-skills/ctj-playwright-bootstrap ~/.codex/skills/ && \
+cp -r /tmp/playwright-skills/playwright-common ~/.codex/skills/ && \
+cp -r /tmp/playwright-skills/playwright-matrix-plan ~/.codex/skills/ && \
+rm -rf /tmp/playwright-skills && \
+echo "✅ 安装完成"
+```
+
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/shuaishuaiASDF/playwright-skills.git $env:TEMP\playwright-skills
+Copy-Item -Recurse $env:TEMP\playwright-skills\ctj-playwright-bootstrap $env:USERPROFILE\.codex\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-common $env:USERPROFILE\.codex\skills\
+Copy-Item -Recurse $env:TEMP\playwright-skills\playwright-matrix-plan $env:USERPROFILE\.codex\skills\
+Remove-Item -Recurse $env:TEMP\playwright-skills
+Write-Host "✅ 安装完成"
+```
+
+### 验证安装
+
+重启 Claude Code / Codex，确认 Skill 已加载：
+
+```bash
+# Claude Code — 查看可用命令
+/help
+
+# Codex — 确认 skills 目录存在
+ls ~/.codex/skills/
+```
+
+预期输出：
 
 ```
 ctj-playwright-bootstrap  — 初始化 Playwright ui-test 框架
@@ -113,10 +137,17 @@ playwright-common         — 日常 Playwright 脚本开发
 playwright-matrix-plan    — 测试矩阵分析与规划
 ```
 
-如果未出现，检查复制路径是否正确，确认目录结构为：
+如果未出现，确认目录结构正确：
 
 ```
+# Claude Code
 ~/.claude/skills/
+├── ctj-playwright-bootstrap/SKILL.md
+├── playwright-common/SKILL.md
+└── playwright-matrix-plan/SKILL.md
+
+# Codex
+~/.codex/skills/
 ├── ctj-playwright-bootstrap/SKILL.md
 ├── playwright-common/SKILL.md
 └── playwright-matrix-plan/SKILL.md
