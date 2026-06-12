@@ -10,15 +10,16 @@
 
 - 项目还没有 Playwright 基础骨架
 - 项目还没有 `ui-test/` 初始目录与基础模板
-- 项目需要首次补齐 reporter 母版、package、tsconfig、playwright.config 等基础文件
+- 项目需要首次补齐 reporter 母版、package、tsconfig、playwright.config、`.env.db.local` 等基础文件
 
-以上场景应优先调用 `$playwright-bootstrap`，不要在本示例中直接初始化框架。
+以上场景应提示用户显式改走 `$playwright-bootstrap`，不要在本示例中直接初始化框架。
 
 ## 接入原则
 
 - 优先复用项目已有 reporter，不要重写一套新的 markdown 输出逻辑
 - 只补当前页面所需的最小接入，不顺手改全局公共层
-- 若发现当前项目实际上还没有稳定的 Playwright 基础骨架，暂停本方案，转用 `$playwright-bootstrap`
+- 若发现当前项目实际上还没有稳定的 Playwright 基础骨架，暂停本方案，并提示用户显式改走 `$playwright-bootstrap`
+- 若发现当前项目缺少 `package.json`、`tsconfig.json`、`playwright.config.ts`、`.env.db.local` 这类基础运行配置，也暂停本方案，并提示用户显式改走 `$playwright-bootstrap`
 - 若项目已有章节分组能力，优先输出 `正常流`、`边界流`、`异常流`，确有跨页面或跨接口闭环时再追加 `联调场景`
 - 关键接口建议同步记录原证，避免只看 UI 提示造成“伪通过”
 - 项目工具的最终产物应与 `templates/audit-report-template.md` 保持一致
@@ -32,7 +33,7 @@
 2. 在测试开始前初始化 reporter，传入模块名、目标标识、报告标题
 3. 在每个关键验证点调用 `log` 或 `logWithSection`；`log` 默认归入正常流，边界、异常、联调场景必须使用 `logWithSection`
 4. 在关键接口完成后调用 `logApi` 记录 `Request / Response`
-5. 若场景依赖 DB、文件或事件等外部证据，调用项目 reporter 的对应方法；没有现成方法时，优先先确认是否应由 bootstrap skill 补齐基础 reporter，再决定是否最小扩展
+5. 若场景依赖 DB、文件或事件等外部证据，调用项目 reporter 的对应方法；没有现成方法时，优先先确认是否应由 bootstrap skill 补齐基础 reporter 或基础 DB 配置文件，再决定是否最小扩展
 6. 在测试结束阶段调用 `generateReport()` 输出最终报告
 
 ## 示例代码
@@ -167,4 +168,4 @@ test.describe('业务对象审计', () => {
 - 若当前页面只做轻量验证，也建议至少补 1 个关键截图和 1 条接口原证
 - 项目 reporter 应允许输出包含 `FAIL / WARN / SKIP` 的审计报告，但不要伪造成功报告
 - 若脚本执行级别失败导致流程中断，应明确标记阻断原因，并避免输出误导性的成功结论
-- 若当前仓库连 reporter 母版和基础目录都没有，不要在本示例内硬起一套，直接转 `$playwright-bootstrap`
+- 若当前仓库连 reporter 母版、基础目录或 `.env.db.local` 这类基础配置都没有，不要在本示例内硬起一套，应提示用户显式改走 `$playwright-bootstrap`

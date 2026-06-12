@@ -1,4 +1,6 @@
+# @AI-Begin A1B2C 20260612 Codex
 interface:
   display_name: "Playwright Common"
-  short_description: "Plan, implement, and audit Playwright tests"
-  default_prompt: "Use $playwright-common to analyze a page, design a scenario matrix, implement Playwright coverage, and produce an audit-ready report."
+  short_description: "Analyze, implement, and audit Playwright work in an existing framework"
+  default_prompt: "Use $playwright-common to analyze a page, design a scenario matrix, implement or review Playwright coverage, and produce an audit-ready report inside an existing Playwright or ui-test framework."
+# @AI-End A1B2C 20260612 Codex

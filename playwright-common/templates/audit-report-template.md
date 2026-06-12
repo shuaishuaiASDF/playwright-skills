@@ -11,7 +11,7 @@
 ## 使用说明
 
 - 本模板就是 `playwright-common` 的标准审计报告结构。
-- 项目内已有 reporter 时，应按该标准结构生成报告；没有统一 reporter 时，可参考 `examples/audit-reporter.ts`。
+- 项目内已有 reporter 时，应按该标准结构生成报告；没有统一 reporter 时，可参考 `examples/audit-reporter-integration.md`。
 - 正式生成时，报告目录应使用项目已有约定；没有约定时，可采用 `reports/Audit_{moduleName}_{targetId}_{timestamp}/`。
 - 主文件通常为 `index.md`，截图与报告同目录存放，并在证据列内联展示。
 - 若脚本已使用 `logWithSection`，章节顺序优先为：`正常流`、`边界流`、`异常流`。

@@ -1,6 +1,6 @@
 ---
 name: "playwright-common"
-description: "Playwright UI/E2E test analysis, scenario matrix design, spec implementation, reusable test capability extraction, network/data waiting patterns, reporter integration, and audit-report generation. Use when Codex is asked to analyze a page for automation, implement or review Playwright specs, design coverage matrices, wire project reporter evidence, or produce audit-ready validation reports inside an existing Playwright framework. Do not use for first-time Playwright directory initialization, initial ui-test scaffolding, or bootstrap template creation; in those cases invoke the project bootstrap skill instead."
+description: "Playwright UI/E2E test analysis, scenario matrix design, spec implementation, reusable test capability extraction, network/data waiting patterns, reporter integration, and audit-report generation inside an existing Playwright or ui-test framework. Use when Codex is asked to analyze a page for automation, implement or review Playwright specs, design coverage matrices, wire project reporter evidence, or produce audit-ready validation reports for a repo that already has its Playwright base scaffold. Do not use for first-time Playwright or ui-test initialization, base-directory scaffolding, package or tsconfig or playwright config creation, reporter or DB template bootstrapping, or other bootstrap work; in those cases stop the current flow and ask the user to switch to playwright-bootstrap explicitly."
 ---
 
 # Playwright Common
@@ -10,7 +10,8 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 先读代码，再分析；除非用户明确说“直接落地”，否则不要一开始就写脚本。
 - 结论必须基于真实代码、真实接口、真实运行结果，禁止猜测页面能力、接口行为、校验规则。
 - 优先复用项目内已有 Playwright 公共能力、测试夹具、登录态方案、报告模板、选择器约定；新增能力只做最小必要沉淀。
-- 如果需求是“首次初始化 Playwright 基础框架 / 搭建 ui-test 初始目录 / 补齐基础骨架”，不要在本 Skill 内处理，转用 `$playwright-bootstrap`。
+- 如果需求是“首次初始化 Playwright 基础框架 / 搭建 ui-test 初始目录 / 补齐基础骨架”，不要在本 Skill 内处理，请先调用 `$playwright-bootstrap` 这个初始化 skill。
+- 当检查到仓库缺少基础骨架时，本 Skill 只负责识别边界并停止当前流程，不在此展开初始化步骤、模板复制或依赖安装。
 - 报告必须优先对齐当前 Skill 定义的标准审计结构；若仓库内已有成熟自动化脚本或报告实现，则实现方式应与该标准保持一致。
 - 复杂字段回归优先采用字段审计模型，为每个字段定义来源、校验方式与比对规则，不要在 spec 里零散堆积断言。
 - `PASS / WARN / FAIL / SKIP` 要严格区分：业务断言不成立时应记录审计 `FAIL`，依赖缺失时记录 `SKIP`，不要把可审计的业务结果包装成脚本崩溃。
@@ -26,7 +27,6 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 
 - 本 Skill 是 Playwright 自动化的标准层与母版规范。
 - 本 Skill 不负责新项目的 Playwright 基础框架初始化。
-- 若任务目标是首次创建或首次补齐 `ui-test/` 基础骨架，应优先调用 `$playwright-bootstrap`。
 - 若仓库内同时存在“项目专用 Playwright Skill”，则项目专用 Skill 应继承本 Skill 的标准，再补充项目差异，不应重复复制整份通用规则。
 - 当任务明确命中某个项目专用 Skill 的触发条件时，应优先触发项目专用 Skill；本 Skill 继续作为其底层标准。
 - 当任务不属于任何项目专用 Skill，或当前仓库没有项目专用 Skill 时，直接使用本 Skill。
@@ -69,6 +69,12 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 落地实现检查清单：`references/implementation-checklist.md`
 - README 文档模板：`templates/readme-template.md`
 
+## 边界规则
+
+- 若当前仓库未发现 `playwright.config.ts`，或 `package.json` 中未声明 `@playwright/test` 依赖，则判定为缺少可用的 Playwright 基础骨架；应停止当前流程，并明确提示：请先调用 `$playwright-bootstrap` 这个初始化 skill。
+- 若任务目标是首次创建或首次补齐 `ui-test/` 基础骨架，或需要首次创建 `package.json`、`tsconfig.json`、`playwright.config.ts`、`.env.db.local`、初始化 README、reporter/DB 模板等基础文件，应停止当前流程，并明确提示：请先调用 `$playwright-bootstrap` 这个初始化 skill。
+- 本 Skill 只负责已有框架内的分析、实现、评审、接入与验证，不展开初始化方案、模板复制或依赖安装。
+
 ## 执行总原则
 
 1. 所有结论必须基于真实代码、真实接口、真实运行结果，禁止猜测页面能力、接口行为、校验规则。
@@ -85,12 +91,13 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 推荐按以下顺序执行，避免跳步骤导致结论失真：
 
 1. 识别页面入口、角色、环境、核心场景与执行方式。
-2. 阅读最小必要代码与已有测试资产，确认页面真实能力、接口入口、公共基建和报告约定。
-3. 判断是否存在待确认项，例如登录态不明、接口不明、数据前置条件不明、是否允许 mock 不明。
-4. 若是分析模式，优先使用 `templates/analysis-output-template.md` 与 `templates/scenario-matrix-template.md` 输出分析结果。
-5. 若是直接落地模式，先完成最小分析，再开始实现脚本、补充必要公共能力、运行验证。
-6. 执行后使用 `templates/audit-report-template.md` 或项目既有报告模板生成结果总结。
-7. 交付时必须明确说明复用了哪些项目资产、参考了哪些已有脚本，以及本次是否完全对齐其结构。
+2. 先检查仓库内是否存在 `playwright.config.ts`，以及 `package.json` 是否声明 `@playwright/test`；若任一项不满足，停止当前流程，并提示用户先调用 `$playwright-bootstrap` 这个初始化 skill。
+3. 阅读最小必要代码与已有测试资产，确认页面真实能力、接口入口、公共基建和报告约定。
+4. 判断是否存在待确认项，例如登录态不明、接口不明、数据前置条件不明、是否允许 mock 不明。
+5. 若是分析模式，优先使用 `templates/analysis-output-template.md` 与 `templates/scenario-matrix-template.md` 输出分析结果。
+6. 若是直接落地模式，先完成最小分析，再开始实现脚本、补充必要公共能力、运行验证。
+7. 执行后使用 `templates/audit-report-template.md` 或项目既有报告模板生成结果总结。
+8. 交付时必须明确说明复用了哪些项目资产、参考了哪些已有脚本，以及本次是否完全对齐其结构。
 
 ## 模板使用要求
 
@@ -111,17 +118,8 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 
 ### README 文档维护要求
 
-- **何时更新**：每次新增测试模块、公共能力或测试脚本时，必须同步更新项目测试 README 或脚本清单。
-- **更新内容**：
-  1. **目录结构说明**：新增的目录或关键文件需在项目对应章节中补充简要说明。
-  2. **脚本执行清单**：新增的测试脚本需在项目对应脚本清单中补充完整执行命令。
-- **模板参考**：使用 `templates/readme-template.md` 作为“已有框架内 README 维护模板”，保持文档结构一致。
-- **维护原则**：
-  - 文档必须与实际目录结构保持同步
-  - 每个目录和关键文件都应有简要说明
-  - 脚本清单应包含完整的可执行命令
-  - 删除或重命名文件时需同步更新文档
-  - Markdown/README 是否需要 AI 变更标记由项目规则决定；公共 Skill 不强制在文档中插入项目级标记
+- 每次新增测试模块、公共能力或测试脚本时，必须同步更新项目测试 README 或脚本清单。
+- README 结构参考 `templates/readme-template.md`，但是否插入项目级标记仍由目标仓库规则决定。
 - 无论是“先分析”还是“直接输出/直接落地”，`测试场景矩阵` 都必须使用 Markdown 表格展示，不要改成散点列表。
 - 场景矩阵表格至少应包含以下列：
   - `场景编号`
@@ -142,38 +140,12 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 测试场景矩阵必须一次性列出当前已经识别到的全部场景，不管本轮实际只写了多少，都不能分几次逐步补列。
 - 若后续发现新增场景，应说明这是“新识别出的场景”，并回填到完整矩阵，而不是仅追加一个零散补充列表。
 
-## 报告生成优先级
+## 报告与证据
 
-当任务进入"验证结果输出"阶段时，报告生成策略必须按以下优先级决策：
-
-1. 以 `templates/audit-report-template.md` 作为标准报告结构。
-2. 若项目已有公共 reporter、markdown 生成器或统一报告基建，应优先复用该工具，但最终产物必须对齐本 Skill 的标准结构。
-3. 若项目存在成熟专项脚本，且这些脚本已经沉淀出稳定报告风格，应优先检查其是否已符合本 Skill 标准；符合则直接复用，不符合则按标准收敛。
-4. 若项目内没有现成 reporter 或统一工具，先判断当前任务是否其实属于“首次补齐基础框架”；若是，转用 `$playwright-bootstrap` 补齐基础 reporter 模板，再在本 Skill 中做接入与场景落地。
-
-### 报告生成器使用规则
-
-- 本 Skill 优先处理“如何接入已有 reporter”，而不是“如何初始化 reporter 母版”。
-- 若项目中没有统一生成报告的代码，先确认：
-  - 这是否属于首次初始化 / 首次补齐基础框架；
-  - 若是，则调用 `$playwright-bootstrap`；
-  - 若不是，则在分析结论里明确指出“当前项目缺少 reporter 基建，需要先补基础框架或提供统一报告方案”。
-
-### 使用要求
-
-- 报告器代码层的 `section` 入参统一使用 `normal / boundary / exception`；确有联调章节时使用 `integration`。中文 `正常流 / 边界流 / 异常流 / 联调场景` 只作为报告展示名，不要在 `logWithSection` 中直接传中文章节名。
-- 当前模板结构本身就是标准，不再区分"项目版模板"和"通用版模板"。
-- 若复用了项目已有 reporter，输出中必须明确说明复用了哪个工具，以及它是否已按本 Skill 标准产出。
-- 若按项目工具生成报告，应同时检查：
-  - 报告目录命名
-  - 主文件命名
-  - 截图保存位置
-  - 章节分组方式
-  - API 原证附录形式
-  - DB、文件、事件等外部原证附录形式
-  - `PASS / WARN / FAIL / SKIP` 是否都能进入摘要统计
+- 报告优先对齐 `templates/audit-report-template.md`；若项目已有 reporter、markdown 生成器或统一报告基建，应优先复用并保持结构一致。
+- 报告器代码层的 `section` 入参统一使用 `normal / boundary / exception`；确有联调章节时使用 `integration`。中文章节名只作为展示名，不要直接传入 `logWithSection`。
 - 若项目已有 reporter 但当前页面尚未接入，可参考 `examples/audit-reporter-integration.md` 设计最小接入方案。
-- 若当前任务意图其实是“先搭 Playwright 基础框架”，不要继续在本 Skill 中发散，应转用 `$playwright-bootstrap`。
+- `PASS / WARN / FAIL / SKIP` 语义、外部原证要求、报告聚合方式与失败态生成规则，统一读取 `references/evidence-and-reporting.md`，不要在实现时自行发明另一套口径。
 
 ## 必做阅读范围
 
@@ -303,103 +275,14 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
   - `用户名(UI回显)`
   - `手机号(API回查)`
   - `状态(UI回显)`
-
-### 字段审计模型
-
-- 列表页、详情页、保存后回查等字段级审计场景，先定义字段模型，再决定 `UI / API / UI+API` 校验来源，不要在 spec 中零散堆积 `toContainText`。
-- 最小字段模型包含 `label / apiProp / aliases / source / compareMode / requiredInUi`；缺项时必须说明可省略原因。
-- 字段未在 UI 展示时，先判断它是“页面本就不展示”还是“疑似漏展示”；前者不要强行判错，后者按场景记 `WARN` 或 `FAIL`。
-- 唯一键查询命中、保存后回查、查看页字段审计等高频模式，优先参考 `examples/field-audit-ui-api-pattern.md`，再按项目 DOM 和接口结构补实现。
-
-## 报告要求
-
-### 聚合要求
-
-- 正常流、边界流、异常流必须汇总到同一份报告中。
-- 不要拆分成多份成功报告。
-- 统一报告内必须按章节输出：
-  - 正常流
-  - 边界流
-  - 异常流
-- 若本次任务确实追加了 `联调场景`，可在三类默认章节之后追加“联调场景”章节，但不能替代前三类。
-
-
-### 三类流统一摘要
-
-- 若采用当前标准模板的表格化流水结构，可不强制补写“每章节独立摘要”，因为 Mermaid 摘要 + 分章节 Evidence Chain 已构成标准摘要表达。
-- 若某个实现方式没有统一摘要或分章节流水能力，则应补充正常流、边界流、异常流的简洁摘要，避免只写执行过程不写结论。
-- 需要补摘要时，建议至少包含：
-  - 覆盖范围
-  - 结果结论：通过数 / 失败数 / 阻断项
-  - 关键证据：截图编号、附件路径或报告锚点
-- 正常流摘要若单独输出，需额外写清主链路完成率与关键业务断言是否成立。
-
-### 生成时机
-
-- “脚本失败”专指 Playwright 执行报错、关键步骤中断、用例崩溃或无法形成有效审计结果。
-- 若脚本顺利执行完成，即使业务验证点出现 `FAIL / WARN`，也应照常生成审计报告，并在报告中如实标记失败点或风险点，禁止伪装成成功报告。
-- 若脚本执行级别已经失败到无法形成有效审计结果，可不生成成功报告；如项目已有 reporter 支持失败态报告，则应输出失败态/阻断态报告并明确说明阻断原因。
-- 查询无命中、外部数据未查到、接口返回业务失败等可观测结果，不应默认抛成 Playwright 技术异常；应先按业务预期记录 `PASS / WARN / FAIL / SKIP` 和证据。
-- 只有无法继续采集可靠证据时，才把当前问题升级为脚本执行失败。
-
-### 每个验证点的证据要求
-
-每一个验证成功时都要输出证据，且报告中必须体现：
-
-- 当前验证点名称
-- UI 观测结果
-- API、DB、文件或事件等非 UI 观测结果；若没有非 UI 证据，必须说明原因
-- 业务结论
-
-不能只有截图，没有结果说明。
-
-### 观测值展示规范
-
-- 字段级审计点必须同时记录 `uiVal` 与 `apiVal`；任一侧暂时没有值时，明确写 `-`，不要留空。
-- 报告中的 `观测值` 默认按 `UI:` 和 `API:` 两行展示，不要只写“字段匹配”“字段不匹配”这类无原始观测值的结论句。
-- `UI+API` 混合校验时，`UI` 写页面实际回显值，`API` 写接口返回值、保存入参值或回查值，不要把两者揉成一句自然语言。
-- 若字段未在 UI 中展示但 API 中有值，必须明确记录它属于“页面本就不展示”还是“疑似漏展示”，不要只写“未找到字段”。
-- 除非项目内的 reporter 已显式支持额外状态并已纳入汇总，否则字段不匹配统一记为 `FAIL`，不要额外引入 `MISMATCH` 等不会进入摘要统计的状态。
-- 若同一验证点还附带截图，截图仅作为视觉证据补充，不能替代 `uiVal / apiVal` 的文字观测。
-
-### PASS / WARN / FAIL 语义
-
-- `PASS`：验证点满足预期，业务结果成立。
-- `WARN`：脚本执行正常，但页面当前真实业务观测与理想预期不一致，或页面行为存在实现差异；此时要记录证据并继续执行，不应直接把整条链路判为脚本失败。
-- `FAIL`：业务验证点失败，或页面/接口行为未达到预期；只要脚本仍能继续记录并形成有效审计结果，就应在报告中如实标记为 `FAIL`。
-
-对于 `WARN`，必须写清楚：
-
-- 触发条件
-- UI 观测结果
-- 接口或数据观测结果
-- 为什么记为 `WARN` 而不是 `FAIL`
-- 若 `WARN` 来源于“字段未在 UI 直接展示”，必须补充说明：
-  - 该字段是否已通过 API 回查
-  - 该字段是页面本就未展示，还是疑似漏展示
+- 字段审计模型、最小字段集与高频模式示例统一参考 `examples/field-audit-ui-api-pattern.md`，不要在 spec 中零散堆积 `toContainText`。
 
 ## 查询场景专项规则
 
-1. 查询类场景默认只允许单次查询，不要因为结果是 `WARN` 就反复重试或循环查询。
-2. 只有在“新增后立即查询”或“编辑后立即查询”这类明确存在最终一致性或表格刷新竞态的场景下，才允许最小范围短轮询；如果用了，必须说明：
-- 为什么需要轮询
-- 轮询只用于哪一个步骤
-- 超时时间和频率
-3. 查询结果中的“命中条数”必须优先取接口返回的总条数，例如 `total`、`totalCount` 或项目真实分页字段。
-4. 如果接口没有返回总条数，必须明确说明当前展示的是“当前页条数”，不能误写成“总条数”。
-5. 对于状态筛选、下拉筛选这类条件，不要只用“目标数据是否出现在当前页”作为唯一断言依据；要优先判断：
-- 查询接口是否成功
-- 是否真实返回了符合筛选条件的数据
-- 当前页数据是否与筛选条件一致
-- 若目标项未出现在当前页，要如实说明这是“目标项未落在当前页”还是“筛选未生效”
-6. 对于账号、用户名、手机号、编码、单号这类精确或半精确查询，如果未命中，应区分：
-- 接口总条数为 0
-- 接口有数据但目标项不在当前页
-- 接口有数据但字段匹配逻辑与预期不一致
-7. 对于唯一键回查场景，不要只校验“命中”；命中后还应补充关键字段一致性校验。
-8. 若查询后要做字段一致性审计，优先遵循“字段审计模型 + UI/API 分流校验”的方式，而不是直接拿整行文本做全字段硬比。
-9. 若页面会自动发起初始化查询，响应等待必须同时校验触发动作的请求上下文，例如请求体、查询参数、方法或场景唯一键，避免把初始化响应误当成本次查询结果。
-10. 查询结果为 0 时，按场景目标决定状态：验证空态则可 `PASS`，期望命中则应 `FAIL`，样本缺失或依赖未配置则应 `SKIP` 或保持部分覆盖。
+- 查询默认只允许单次执行；仅在新增后立即查询、编辑后立即查询等明确存在最终一致性场景时，才允许最小范围短轮询。
+- 查询断言优先看接口总条数、筛选是否真实生效、目标数据是否命中，再决定是否继续做字段审计。
+- 查询为 0 条时，不要直接抛技术异常；验证空态可 `PASS`，期望命中应 `FAIL`，样本缺失或依赖未配置应 `SKIP` 或保持部分覆盖。
+- 初始化自动请求误匹配、请求上下文过滤、真实数据与 mock 分层、轮询边界和零命中口径，统一读取 `references/network-and-data-patterns.md`。
 
 ## 等待策略
 
@@ -474,4 +357,3 @@ description: "Playwright UI/E2E test analysis, scenario matrix design, spec impl
 - 如果用户说“直接落地”，可以直接实现并跑验证。
 - 如果参考了仓库内已有同类脚本的报告格式或实现方式，必须明确说明参考了哪个脚本，以及本次是否保持一致。
 - 若仓库内已有同类页面的成熟报告模板或聚合报告实现，优先完全对齐其结构，不要自行发明新的报告格式。
-- 如果项目没有现成的 reporter、目录规范、命名规范、登录态基建，应先判断是否属于初始化需求；属于初始化需求时，转用 `$playwright-bootstrap`，不要在本 Skill 内自行搭目录骨架。
